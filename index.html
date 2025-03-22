@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Player</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #121212;
+            color: white;
+        }
+        .song {
+            display: inline-block;
+            margin: 20px;
+            cursor: pointer;
+        }
+        .song img {
+            width: 150px;
+            border-radius: 10px;
+        }
+        .player-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #222;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="songs"></div>
+    <div class="player-bar" id="player-bar" style="display: none;">
+        <div>
+            <p id="song-title"></p>
+            <p id="song-artist"></p>
+        </div>
+        <button onclick="togglePlay()" id="play-btn">Play</button>
+    </div>
+    
+    <script>
+        const songs = [
+            { title: "Song One", artist: "Artist One", cover: "assets/cover1.jpg", src: "assets/song1.mp3" },
+            { title: "Song Two", artist: "Artist Two", cover: "assets/cover2.jpg", src: "assets/song2.mp3" },
+            { title: "Song Three", artist: "Artist Three", cover: "assets/cover3.jpg", src: "assets/song3.mp3" }
+        ];
+
+        const songsContainer = document.getElementById("songs");
+        const playerBar = document.getElementById("player-bar");
+        const songTitle = document.getElementById("song-title");
+        const songArtist = document.getElementById("song-artist");
+        const playBtn = document.getElementById("play-btn");
+        const audio = new Audio();
+        let isPlaying = false;
+
+        songs.forEach(song => {
+            const songElement = document.createElement("div");
+            songElement.classList.add("song");
+            songElement.innerHTML = `<img src="${song.cover}" alt="${song.title}"><p>${song.title}</p><p>${song.artist}</p>`;
+            songElement.onclick = () => playSong(song);
+            songsContainer.appendChild(songElement);
+        });
+
+        function playSong(song) {
+            if (audio.src !== song.src) {
+                audio.src = song.src;
+                songTitle.textContent = song.title;
+                songArtist.textContent = song.artist;
+                playerBar.style.display = "flex";
+                audio.play();
+                isPlaying = true;
+                playBtn.textContent = "Pause";
+            } else {
+                togglePlay();
+            }
+        }
+
+        function togglePlay() {
+            if (isPlaying) {
+                audio.pause();
+                playBtn.textContent = "Play";
+            } else {
+                audio.play();
+                playBtn.textContent = "Pause";
+            }
+            isPlaying = !isPlaying;
+        }
+    </script>
+</body>
+</html>
